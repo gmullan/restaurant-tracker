@@ -15,4 +15,32 @@ class RestaurantMemStore {
         restaurant.id = lastId.incrementAndGet()
         restaurants.add(restaurant)
     }
+
+    fun findOne(id: Long): RestaurantModel? {
+        return restaurants.find { r -> r.id == id }
+    }
+
+    fun update(restaurant: RestaurantModel): Boolean {
+        val foundRestaurant = findOne(restaurant.id)
+
+        return if (foundRestaurant != null) {
+            foundRestaurant.name = restaurant.name
+            foundRestaurant.location = restaurant.location
+            foundRestaurant.rating = restaurant.rating
+            true
+        } else {
+            false
+        }
+    }
+
+    fun delete(id: Long): Boolean {
+        val foundRestaurant = findOne(id)
+
+        return if (foundRestaurant != null) {
+            restaurants.remove(foundRestaurant)
+            true
+        } else {
+            false
+        }
+    }
 }
