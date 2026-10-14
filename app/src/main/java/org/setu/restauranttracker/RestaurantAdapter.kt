@@ -3,15 +3,14 @@ package org.setu.restauranttracker
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.setu.restauranttracker.models.RestaurantModel
+import timber.log.Timber
 
 class RestaurantAdapter(
     private val restaurants: List<RestaurantModel>,
-    private val onEdit: (RestaurantModel) -> Unit,
-    private val onDelete: (RestaurantModel) -> Unit
+    private val listener: OnRestaurantListener
 ) : RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>() {
 
     class RestaurantViewHolder(itemView: View) :
@@ -26,11 +25,6 @@ class RestaurantAdapter(
         val coordinatesText: TextView =
             itemView.findViewById(R.id.coordinatesText)
 
-        val editButton: Button =
-            itemView.findViewById(R.id.editButton)
-
-        val deleteButton: Button =
-            itemView.findViewById(R.id.deleteButton)
     }
 
     override fun onCreateViewHolder(
@@ -49,17 +43,18 @@ class RestaurantAdapter(
         position: Int
     ) {
         val restaurant = restaurants[position]
+        Timber.d("Displaying restaurant id=${restaurant.id}")
 
         holder.titleText.text = "${restaurant.id}: ${restaurant.name}"
         holder.descriptionText.text = restaurant.location
         holder.coordinatesText.text = "Rating: ${restaurant.rating}/5"
 
-        holder.editButton.setOnClickListener {
-            onEdit(restaurant)
+        holder.itemView.setOnClickListener {
+            listener.onRestaurantClick(restaurant)
         }
 
-        holder.deleteButton.setOnClickListener {
-            onDelete(restaurant)
+        holder.itemView.setOnLongClickListener {
+            listener.onRestaurantLongClick(restaurant)
         }
     }
 

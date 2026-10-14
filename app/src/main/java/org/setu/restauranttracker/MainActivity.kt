@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,6 +13,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+        Timber.plant(Timber.DebugTree())
+        Timber.d("RestaurantTracker started")
 
         val viewRestaurantsButton =
             findViewById<Button>(R.id.viewRestaurantsButton)
