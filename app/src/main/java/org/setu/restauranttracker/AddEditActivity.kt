@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.Toast
 import org.setu.restauranttracker.models.RestaurantModel
+import android.widget.TextView
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -19,51 +20,28 @@ class AddEditActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val root = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(32, 320, 32, 32)
+        setContentView(R.layout.activity_add_edit)
+
+        nameInput = findViewById(R.id.nameInput)
+        locationInput = findViewById(R.id.locationInput)
+        ratingInput = findViewById(R.id.ratingInput)
+
+        val saveButton = findViewById<Button>(R.id.saveButton)
+        val cancelButton = findViewById<Button>(R.id.cancelButton)
+
+        saveButton.setOnClickListener {
+            saveRestaurant()
         }
 
-        nameInput = EditText(this).apply {
-            hint = "Restaurant name"
+        cancelButton.setOnClickListener {
+            finish()
         }
 
-        locationInput = EditText(this).apply {
-            hint = "Location"
-        }
-
-        ratingInput = EditText(this).apply {
-            hint = "Rating (1-5)"
-            inputType = android.text.InputType.TYPE_CLASS_NUMBER
-        }
-
-        val saveButton = Button(this).apply {
-            text = "Save"
-
-            setOnClickListener {
-                saveRestaurant()
-            }
-        }
-
-        val cancelButton = Button(this).apply {
-            text = "Cancel"
-
-            setOnClickListener {
-                finish()
-            }
-        }
-
-        root.addView(nameInput)
-        root.addView(locationInput)
-        root.addView(ratingInput)
-        root.addView(saveButton)
-        root.addView(cancelButton)
-
-        setContentView(root)
 
         editingId = intent.getLongExtra("id", -1L)
 
         if (editingId != -1L) {
+            findViewById<TextView>(R.id.formTitle).text = "Edit Restaurant"
             loadExistingRestaurant(editingId)
         }
     }
