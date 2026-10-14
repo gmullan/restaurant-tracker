@@ -47,7 +47,8 @@ class RestaurantAdapter(
 
         holder.titleText.text = "${restaurant.id}: ${restaurant.name}"
         holder.descriptionText.text = restaurant.location
-        holder.coordinatesText.text = "Rating: ${restaurant.rating}/5"
+        holder.coordinatesText.text =
+            "Date visited: ${restaurant.dateVisited}\nRating: ${restaurant.rating}/5"
 
         holder.itemView.setOnClickListener {
             listener.onRestaurantClick(restaurant)
