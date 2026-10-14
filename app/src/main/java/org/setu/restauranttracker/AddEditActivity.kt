@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.Toast
 import org.setu.restauranttracker.models.RestaurantModel
 import android.widget.TextView
+import timber.log.Timber
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -68,39 +69,20 @@ class AddEditActivity : AppCompatActivity() {
         }
 
         if (editingId == -1L) {
-
-            val restaurant = RestaurantModel(
-                name = name,
-                location = location,
-                rating = rating
-            )
-
+            val restaurant = RestaurantModel(name = name, location = location, rating = rating)
             AppData.restaurants.create(restaurant)
 
-            Toast.makeText(
-                this,
-                "Restaurant created",
-                Toast.LENGTH_SHORT
-            ).show()
+            Timber.d("Created restaurant id=${restaurant.id}")
 
+            Toast.makeText(this, "Restaurant created", Toast.LENGTH_SHORT).show()
         } else {
-
-            val restaurant = RestaurantModel(
-                id = editingId,
-                name = name,
-                location = location,
-                rating = rating
-            )
-
+            val restaurant = RestaurantModel(id = editingId, name = name, location = location, rating = rating)
             AppData.restaurants.update(restaurant)
 
-            Toast.makeText(
-                this,
-                "Restaurant updated",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+            Timber.d("Updated restaurant id=${restaurant.id}")
 
+            Toast.makeText(this, "Restaurant updated", Toast.LENGTH_SHORT).show()
+        }
         finish()
     }
 

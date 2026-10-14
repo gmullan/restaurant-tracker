@@ -6,6 +6,9 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.setu.restauranttracker.models.RestaurantModel
+import androidx.appcompat.app.AlertDialog
+import timber.log.Timber
 
 class RestaurantListActivity : AppCompatActivity() {
 
@@ -23,16 +26,33 @@ class RestaurantListActivity : AppCompatActivity() {
 
         recyclerView.adapter = RestaurantAdapter(
             restaurants,
+            listener = object : OnRestaurantListener {
 
-            onEdit = { restaurant ->
-                val intent = Intent(this, AddEditActivity::class.java)
-                intent.putExtra("id", restaurant.id)
-                startActivity(intent)
-            },
+                override fun onRestaurantClick(restaurant: RestaurantModel) {
+                    Timber.d("Editing restaurant id=${restaurant.id}, name=${restaurant.name}")
 
-            onDelete = { restaurant ->
-                AppData.restaurants.delete(restaurant.id)
-                recyclerView.adapter?.notifyDataSetChanged()
+
+                    val intent = Intent(this@RestaurantListActivity, AddEditActivity::class.java)
+                    intent.putExtra("id", restaurant.id)
+                    startActivity(intent)
+                }
+
+                override fun onRestaurantLongClick(restaurant: RestaurantModel): Boolean {
+                    AlertDialog.Builder(this@RestaurantListActivity)
+                        .setTitle("Delete Restaurant")
+                        .setMessage("Are you sure you want to delete ${restaurant.name}?")
+                        .setPositiveButton("Delete") { _, _ ->
+                            AppData.restaurants.delete(restaurant.id)
+
+                            Timber.d("Deleted restaurant id=${restaurant.id}")
+
+                            recyclerView.adapter?.notifyDataSetChanged()
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .show()
+
+                    return true
+                }
             }
         )
 
