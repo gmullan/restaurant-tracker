@@ -26,6 +26,7 @@ class RestaurantMemStore {
         return if (foundRestaurant != null) {
             foundRestaurant.name = restaurant.name
             foundRestaurant.location = restaurant.location
+            foundRestaurant.dateVisited = restaurant.dateVisited
             foundRestaurant.rating = restaurant.rating
             true
         } else {
